@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mysql
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DEFAULT_AUTHENTICATION_PLUGIN: mysql_native_password
+    volumes:
+      - ./api/db/data:/var/lib/mysql
+      - ./api/db/init:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+  
+  
+  api:
+    build: ./api
+    container_name: node-container
+    ports:
+      - "9001:9001"
+    volumes:
+      - ./api:/home/node/app
+    depends_on:
+      - db
+    restart: unless-stopped
+
+
+  client:
+    image: "php:7.2-apache"
+    container_name: php-container
+    restart: always
+    volumes:
+      - ./client:/var/www/html
+    ports: 
+      - 8888:80
+    depends_on:
+      - db
+      - api
