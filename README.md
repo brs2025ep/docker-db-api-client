@@ -1,25 +1,24 @@
-## Docker-Project
-Description : PHP Client with Node+Express API and MYSQL DATABASE. Nodejs gets data from MySQL and PHP Client retrieves the data with API.
-
-Requiriments:
-- DOCKER
-
- >>>>>>>>> TUTORIAL <<<<<<<<
+# Docker-Project
 
 
-************************
-MYSQL DATABASE
-## Container MySql Docker construído com Dockerfile na pasta /api
 
-1 - /api/db/Dockerfile
-```
+## Requirements
+- **Docker**
+
+******
+
+## MySQL Database Setup
+
+### 1. Dockerfile for MySQL
+Create a Dockerfile in `/api/db/Dockerfile`:
+```dockerfile
 FROM mysql 
 ENV MYSQL_ROOT_PASSWORD=root
 ```
 
-2- SQL Script to generate db 'store' with table 'products'
- /api/db/script.sql : 
-```
+### 2. SQL Script to Generate Database
+Create a SQL script at `/api/db/script.sql`:
+```sql
 CREATE DATABASE IF NOT EXISTS store;
 USE store;
 
@@ -36,82 +35,106 @@ VALUES
     ('Product 3', 30.00);
 ```
 
+### 3. Build and Run MySQL Container
 
-## A1 - Build mysql in container. 
->>  Point your terminal to the root project folder and run the command:
-```docker build -t mysql-image -f api/db/Dockerfile .```
-
-## A2 - Run mysql container 
-
->> Use comand a for Windows Powershell users or b for UNIX/Linux users.
-a - Terminal Windows Powershell
-```docker run -d -v "$(Get-Location)/api/db/data:/var/lib/mysql" --rm --name mysql-container mysql-image```
-
-b - For UNIX/ Linux
-```docker run -d -v $(pwd)/api/db/data:/var/lib/mysql --rm --name mysql-container mysql-image```
-
-## A3 - Run sql script
-
-a - Terminal Linux
-```docker exec -i mysql-container mysql -uroot -proot < api/db/script.sql```
-b - Terminal Windows Powershell
-```Get-Content api/db/script.sql | docker exec -i mysql-container mysql -uroot -proot```
-
-
-************************
-NODE JS + Express API
-
-# Container Nodejs Docker built with Dockerfile in folder /api #
-- /api/db/Dockerfile
+#### A1: Build MySQL Image
+Run the following command from the root project folder:
+```bash
+docker build -t mysql-image -f api/db/Dockerfile .
 ```
+
+#### A2: Run MySQL Container
+- **Windows (PowerShell):**
+```powershell
+docker run -d -v "$(Get-Location)/api/db/data:/var/lib/mysql" --rm --name mysql-container mysql-image
+```
+- **Linux/Unix:**
+```bash
+docker run -d -v $(pwd)/api/db/data:/var/lib/mysql --rm --name mysql-container mysql-image
+```
+
+#### A3: Execute SQL Script
+- **Windows (PowerShell):**
+```powershell
+Get-Content api/db/script.sql | docker exec -i mysql-container mysql -uroot -proot
+```
+- **Linux/Unix:**
+```bash
+docker exec -i mysql-container mysql -uroot -proot < api/db/script.sql
+```
+
+******
+
+## Node.js + Express API Setup
+
+### 1. Dockerfile for Node.js
+Create a Dockerfile in `/api/Dockerfile`:
+```dockerfile
 FROM node:16-alpine
 WORKDIR /home/node/app
 CMD ["npm", "start"]
 ```
 
-- /api/db/package.json
-- /api/db/package-lock.json
+### 2. Build and Run Node.js Container
 
-
-## B1 - Build Node Container
-```docker build -t node-image -f api/db/Dockerfile .```
-
-
-## B2 - Run Node with data volume and listen to port 9001. Command a for Windows and b for UNIX/Linux
-
-a - Windows Powershel
-```docker run -d -v "$(Get-Location)/api:/home/node/app" -p 9001:9001 --rm --name node-container node-image```
-
-b - Linux / UNIX
-```docker run -d -v $(pwd)/api:/home/node/app -p 9001:9001 --rm --name node-container node-image```
-
-
-
-***********
-
-PHP CLIENT
-## Container PHP construído com imagem php-apache de Dockerfile na pasta /client
-
-- client/Dockerfile 
+#### B1: Build Node.js Image
+```bash
+docker build -t node-image -f api/Dockerfile .
 ```
-FROM php:7.2-apache
 
+#### B2: Run Node.js Container
+- **Windows (PowerShell):**
+```powershell
+docker run -d -v "$(Get-Location)/api:/home/node/app" -p 9001:9001 --rm --name node-container node-image
+```
+- **Linux/Unix:**
+```bash
+docker run -d -v $(pwd)/api:/home/node/app -p 9001:9001 --rm --name node-container node-image
+```
+
+******
+
+## PHP Client Setup
+
+### 1. Dockerfile for PHP with Apache
+Create a Dockerfile in `/client/Dockerfile`:
+```dockerfile
+FROM php:7.2-apache
 WORKDIR /var/www/html
 ```
 
-## C1 - Build image of container PHP with Apache
->> ```docker build -t php-image -f client/Dockerfile .```
+### 2. Build and Run PHP Container
 
-## C2 -Run container linked to node-container
->> Windows Powershell
-```docker run -d -v "$(Get-Location)/client:/var/www/html" -p 8888:80 --link node-container --rm --name php-container php-image```
+#### C1: Build PHP Image
+```bash
+docker build -t php-image -f client/Dockerfile .
+```
 
->> Terminal UNIX
-```docker run -d -v $(pwd)/client:/var/www/html -p 8888:80 --link node-container --rm --name php-container php-image```
+#### C2: Run PHP Container Linked to Node.js
+- **Windows (PowerShell):**
+```powershell
+docker run -d -v "$(Get-Location)/client:/var/www/html" -p 8888:80 --link node-container --rm --name php-container php-image
+```
+- **Linux/Unix:**
+```bash
+docker run -d -v $(pwd)/client:/var/www/html -p 8888:80 --link node-container --rm --name php-container php-image
+```
 
+******
+## Additional Commands
 
+- **List Running Containers:**
+```bash
+docker ps
+```
 
+- **Stop a Container:**
+```bash
+docker stop <container-name>
+```
 
-Additional commands
- - docker ps : show running containers
- - docker stop sample-container : stops the target-container
+---
+
+### Notes
+- Ensure Docker is installed and running on your system.
+- Adjust file paths and volume mappings as necessary for your environment.
