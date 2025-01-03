@@ -1,0 +1,15 @@
+# Logs
+logs
+*.log
+
+# Docker-related ignores
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# Environment files
+.env
+.env.test
+.env.*.local
+data/
