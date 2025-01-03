@@ -4,9 +4,11 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     </head>
-    <body>
-        <h1>Client PHP</h1>
-        <p>Consume a Node API hosted in Docked from a PHP client</p>
+    <body class="bg-light">
+        <div class="container py-5">
+            <h1 class="text-primary mb-3">Client PHP</h1>
+            <p class="text-muted lead">Consume a Node API hosted in Docker from a PHP client</p>
+        </div>
 
         <?php
             $result = file_get_contents('http://node-container:9001/products');
