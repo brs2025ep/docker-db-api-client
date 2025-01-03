@@ -4,6 +4,7 @@
 
 ## Requirements
 - **Docker**
+- **Node.js v16**
 
 ******
 
@@ -76,6 +77,13 @@ CMD ["npm", "start"]
 ```
 
 ### 2. Build and Run Node.js Container
+
+### B : install required packages with Node
+>> Node.js required to run the command bellow
+```bash
+cd app
+npm install
+```
 
 #### B1: Build Node.js Image
 ```bash
